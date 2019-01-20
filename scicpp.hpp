@@ -9,17 +9,19 @@
 //                                                                           //
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
+/// @project scicpp
 /// @file    scicpp.hpp
 /// @version 0.0.1 (alpha)
 /// @brief   Scientific coding standard and library for C++.
+/// @date    20-JAN-2019
 /// @author  Sayan Bhattacharjee (aerosayan)
 /// @email   aero.sayan@gmail.com
 /// @license DEFAULT. Will be made Open-Source after development is completed.
 ///////////////////////////////////////////////////////////////////////////////
 /// DISCLAIMER :
 /// This is the intellectual property of the author Sayan Bhattacharjee.
-/// Currently this is not being distributed since development is incompmlete.
-/// In future proper licensing will be done and this coding standard and 
+/// Currently this is not being distributed since development is incomplete.
+/// In future, proper licensing will be done and this coding standard and 
 /// library will be made Open-Source. We do not give any guarantee for the 
 /// correct operation of the library, neither are we to be held responsible
 /// for any kind of damage caused by the use of this software.
@@ -38,10 +40,16 @@
 #include <vector>
 
 //---------------------------------------------------------------------------//
-// Should the debugging be in cerr/cout/clog ?
-// Default : std::cerr
+// The loop iterator data type used
+// unsigned int is used by default to be able to handle very large loops
 //---------------------------------------------------------------------------//
-#define STREAM std::cerr
+#define szt unsigned int
+
+//---------------------------------------------------------------------------//
+// Should the debugging be in cerr/cout/clog ?
+// Default : std::cout
+//---------------------------------------------------------------------------//
+#define STREAM std::cout
 
 //---------------------------------------------------------------------------//
 //  Newline 
@@ -55,15 +63,17 @@
 //---------------------------------------------------------------------------//
 // Print the value of X
 //---------------------------------------------------------------------------//
-#define DBG(X) STREAM<<#X<<"\t:\t"<<(X)<<NL;
+#define DBG(X) STREAM<<#X<<"\t:\t"<<(X)<<NL
+#define DBG2(X,Y) DBG(X); DBG(Y)
+#define DBG3(X,Y,Z) DBG(X); DBG(Y); DBG(Z);
 
 //---------------------------------------------------------------------------//
 // Print the array ARR
 //---------------------------------------------------------------------------//
 #define DBGARR(ARR) \
 STREAM<<#ARR<<"\t:\t["; \
-for(auto x: (ARR)) { \
-  STREAM<<x<<","; \
+for(szt i=1;i<(ARR).size();++i) { \
+  STREAM<<(ARR)[i]<<","; \
 } \
 STREAM<<"]"<<NL;
 
@@ -71,11 +81,11 @@ STREAM<<"]"<<NL;
 // Print the matrix MAT
 //---------------------------------------------------------------------------//
 #define DBGMAT(MAT) \
-STREAM<<#MAT<<"\n"; \
-for(auto vec: (MAT)) {\
+STREAM<<#MAT; \
+for(szt i=1;i<(MAT).size();++i) { \
   STREAM<<"\t:\t["; \
-  for(auto x : vec) { \
-    STREAM<<x<<","; \
+  for(szt j=1;j<(MAT)[i].size();++j) { \
+    STREAM<<(MAT)[i][j]<<","; \
   } \
   STREAM<<"]"<<NL; \
 } 
@@ -85,6 +95,8 @@ for(auto vec: (MAT)) {\
 // If DEBUG is not defined then do not use the debugging features
 #ifndef DEBUG
 #define DBG(X) 
+#define DBG2(X,Y) 
+#define DBG3(X,Y,Z)
 #define DBGARR(ARR) 
 #define DBGMAT(MAT)
 #endif
@@ -112,11 +124,6 @@ for(auto vec: (MAT)) {\
 ///////////////////////////////////////////////////////////////////////////////
 // Language extensions
 ///////////////////////////////////////////////////////////////////////////////
-//---------------------------------------------------------------------------//
-// The loop iterator data type used
-// unsigned int is used by default to be able to handle very large loops
-//---------------------------------------------------------------------------//
-#define szt unsigned int
 
 //---------------------------------------------------------------------------//
 // The ending of a command block.
@@ -178,6 +185,10 @@ for(auto vec: (MAT)) {\
 #define ELSEIF(CONDITION) } else if((CONDITION)) {
 #define ENDIF END
 
+///////////////////////////////////////////////////////////////////////////////
+// Mathematics
+///////////////////////////////////////////////////////////////////////////////
+#define SQ(CMD) (CMD)*(CMD)
 ///////////////////////////////////////////////////////////////////////////////
 // Basic data types
 ///////////////////////////////////////////////////////////////////////////////
