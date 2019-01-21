@@ -52,7 +52,7 @@ end of the nonlinear convection simulation, done using scicpp.
 We then call visualize_nonlinear_convection.py to visualize the following result.
 The code in main.cpp will show exactly to any scientific scholar how it is done and it will be clearly understandable why scicpp is needed.
 
-| ![](img/fig-1-nonlinear-convection.png)|
+| ![](img/fig-2-nonlinear-convection.png)|
 |:--:|
 | *1D Non-Linear Convection simulation done in C++ using scicpp guideline and library* |
 

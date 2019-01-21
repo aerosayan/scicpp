@@ -64,7 +64,7 @@
 // Print the value of X
 //---------------------------------------------------------------------------//
 #define DBG(X) STREAM<<#X<<"\t:\t"<<(X)<<NL
-#define DBG2(X,Y) DBG(X); DBG(Y)
+#define DBG2(X,Y) DBG(X); DBG(Y);
 #define DBG3(X,Y,Z) DBG(X); DBG(Y); DBG(Z);
 
 //---------------------------------------------------------------------------//
