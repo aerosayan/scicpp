@@ -37,7 +37,12 @@
 using namespace std;
 
 // prints a horizontal line
-void hruler(){cout<<"-------------------------------------------------"<<endl;}
+void hruler()
+{
+cout<<
+"-----------------------------------------------------------------------------"
+<<endl;
+}
 
 // Solves the 1D nonliner convection equation using Finite Difference Method
 void run_nonlinear_convection_test();
@@ -69,19 +74,23 @@ int main()
 // We shall be using FTBS( Forward in Time Backward in Space) scheme to solve.
 void run_nonlinear_convection_test()
 {
+  // Loop iterators
+  // NOTE: We define the type first 
+  u32 i,t;
   // No. of spatial nodes
-  u32 nx = 101;
+  u32 nx = 801;
   // No. of temporal iterations
-  u32 nt = 200;
+  u32 nt = 3000;
   // Minimum and maximum space domain which will be discretized
   f64 min_x = 0.0; f64 max_x = 2.0;
   // Spatial discretization 
   f64 dx = (max_x-min_x)/(nx-1);
   // Temporal discretization
-  f64 dt = 0.0015;
+  f64 dt = 0.00015;
 
   // Spatial mesh
   VEC(f64) x(nx+1);
+  // NOTE : The type for i is set earlier
   DO(i,1,nx)
     x[i] = min_x + (dx*(i-1));
   ENDDO
@@ -97,7 +106,7 @@ void run_nonlinear_convection_test()
     un1[i] = 1.0;
   ENDDO
   // We shall be using a  hat function for intial condition
-  DO(i,20,40)
+  DO(i,30,300)
     un1[i] = 2.0;
   ENDDO
 
@@ -121,7 +130,6 @@ void run_nonlinear_convection_test()
     ENDDO
   ENDDO
 
-
   // Write output to file output.dat
   ofstream output_file;
   output_file.open("output.dat",ios::out);
@@ -142,8 +150,12 @@ void run_nonlinear_convection_test()
 // Runs necessary unit tests
 void run_unit_tests()
 {
+  // Loop iterators
+  // NOTE: We define the type first 
+  u32 i;
+
   hruler();
-  cout<<"TST :: Testing DBG,DB2,DBG3..."<<endl;
+  cout<<"TST :: Testing DBG,DB2,DBG3"<<endl;
   s32 varx = 1;
   s32 vary = 2;
   s32 varz = 3;
@@ -152,26 +164,62 @@ void run_unit_tests()
   DBG3(varx,vary,varz);
 
   hruler();
-  cout<<"TST :: Testing VEC,DBGARR..."<<endl;
+  cout<<"TST :: Testing VEC,DBGARR "<<endl;
   VEC(s32) vecx = {0,1,2,3,4,5,6,7,8,9,10};
   DBGARR(vecx);
 
   hruler();
-  cout<<"TST :: Testing MAT,DBGMAT..."<<endl;
+  cout<<"TST :: Testing MAT,DBGMAT "<<endl;
   MAT(s32) matx = {{0,0,0,0,0,0},{0,1,2,3,4,5},{0,6,7,8,9,10}};
   DBGMAT(matx);
 
   hruler();
-  cout<<"TST :: Testing DO..."<<endl;
-  cout<<"    :: Before squaring each element using DO..."<<endl;
-  DBGARR(vecx);
-
+  cout<<"TST :: Testing DO in forward direction"<<endl;
+  cout<<"i\t:\t";
   DO(i,1,10)
-    vecx[i] = SQ(vecx[i]);
+    cout<<i<<",";
   ENDDO
+  cout<<endl;
 
-  cout<<"    :: After squaring each element using DO..."<<endl;
-  DBGARR(vecx);
+  hruler();
+  cout<<"TST :: Testing RDO in reverse direction"<<endl;
+  cout<<"i\t:\t";
+  RDO(i,10,1)
+    cout<<i<<",";
+  ENDDO
+  cout<<endl;
+
+  hruler();
+  cout<<"TST :: Testing DOX in forward direction"<<endl;
+  cout<<"j\t:\t";
+  DOX(u32,j,1,<=,10,1)
+    cout<<j<<",";
+  ENDDO
+  cout<<endl;
+
+  hruler();
+  cout<<"TST :: Testing DOX in forward direction with step=2"<<endl;
+  cout<<"j\t:\t";
+  DOX(u32,j,2,<=,20,2)
+    cout<<j<<",";
+  ENDDO
+  cout<<endl;
+
+  hruler();
+  cout<<"TST :: Testing DOX in reverse direction"<<endl;
+  cout<<"j\t:\t";
+  DOX(u32,j,10,>=,1,-1)
+    cout<<j<<",";
+  ENDDO
+  cout<<endl;
+ 
+  hruler();
+  cout<<"TST :: Testing DOX in reverse direction with step=2"<<endl;
+  cout<<"j\t:\t";
+  DOX(u32,j,20,>=,2,-2)
+    cout<<j<<",";
+  ENDDO
+  cout<<endl;
 
   hruler();
   cout<<"TST :: Testing IF,ELSE,ELSEIF..."<<endl;

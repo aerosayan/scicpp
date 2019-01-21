@@ -137,7 +137,7 @@ for(szt i=1;i<(MAT).size();++i) { \
 // >>     break;
 // >>   END
 // >> END 
-//
+//---------------------------------------------------------------------------//
 // USE : Cosmetic use
 // >> DO(i,1,n)
 // >>   y[i] = sin(x[i]);
@@ -147,25 +147,95 @@ for(szt i=1;i<(MAT).size();++i) { \
 // >> ENDDO
 //---------------------------------------------------------------------------//
 #define END }
+#define ENDDO END
+#define ENDIF END
 
 //---------------------------------------------------------------------------//
-// Increment variable I in the inclusive range [START,END]
+// Increment variable I in the inclusive range [START,END] with step=+1
 // NOTE : These can be nested together.
 //---------------------------------------------------------------------------//
+// NOTE : TYPE for varialbe I needs to be set before calling DO
+//---------------------------------------------------------------------------//
 // USE : 1D case
-// >> DO(i,1,n)
-// >>   y[i] = sqrt(x[i]);
+// >> u32 i;
+// >> DO(i,1,5)
+// >>   cout<<i<<",";
 // >> ENDDO
 // 
+// RESULT : Should print,
+// 1,2,3,4,5,
+//---------------------------------------------------------------------------//
 // USE : Nested 2D case
-// >> DO(i,1,n)
-// >>   DO(j,1,m)
-// >>     mat[i][j] = sin(mat[i][j]) + cos(x[j]);
+// >> u32 i;
+// >> DO(i,1,2)
+// >>   cout<<i<<endl;
+// >>   DO(j,3,4)
+// >>     cout<<j<<",";
 // >>   ENDDO
 // >> ENDDO
+//
+// RESULT : Should print,
+// 1
+// 3,4,
+// 2
+// 3,4,
 //---------------------------------------------------------------------------//
-#define DO(I,START,END) for(szt (I)=(START); (I)<=(END); ++(I)) {
-#define ENDDO END
+#define DO(I,START,END)  for((I)=(START); (I)<=(END); ++(I)) {
+
+//---------------------------------------------------------------------------//
+// Decrement variable I in the inclusive range [START,END] with step=-1
+// NOTE : These can be nested together.
+//---------------------------------------------------------------------------//
+// NOTE : TYPE for varialbe I needs to be set before calling DO
+//---------------------------------------------------------------------------//
+// USE : 1D case 
+// >> u32 i;
+// >> RDO(i,5,1)
+// >>   cout<<i<<",";
+// >> ENDDO
+// 
+// RESULT : Should print,
+// 5,4,3,2,1
+//---------------------------------------------------------------------------//
+// USE : Nested 2D case
+// >> u32 i;
+// >> RDO(i,2,1)
+// >>   cout<<i<<endl;
+// >>   RDO(j,4,3)
+// >>     cout<<j<<",";
+// >>   ENDDO
+// >> ENDDO
+//
+// RESULT : Should print,
+// 2
+// 4,3,
+// 1
+// 4,3,
+//---------------------------------------------------------------------------//
+#define RDO(I,START,END) for((I)=(START); (I)>=(END); --(I)) {
+
+//---------------------------------------------------------------------------//
+// Macro for 1 variable based for loop
+// NOTE : These can be nested together.
+//---------------------------------------------------------------------------//
+// USE : 1D forward driving inclusive range case
+// >> DOX(u32,i,1,<=,5,1) // >> Expands to : for(u32 i=1;i<=5;i+=1)
+// >>   cout<<i<<",";
+// >> ENDDO
+// 
+// RESULT : Should print,
+// 1,2,3,4,5,
+//---------------------------------------------------------------------------//
+// USE : 1D reverse driving exclusive range case
+// >> DOX(u32,i,5,>,1,-1) // >> Expands to : for(u32 i=5;i>1;i+=-1)
+// >>   cout<<i<<",";
+// >> ENDDO
+//
+// RESULT : Should print,
+// 5,4,3,2,
+//---------------------------------------------------------------------------//
+#define DOX(TYPE,I,START,OP,END,STEP) \
+        for(TYPE (I)=(START);(I) OP (END);(I)+=(STEP)){
 
 //---------------------------------------------------------------------------//
 // Conditional operations
@@ -183,7 +253,6 @@ for(szt i=1;i<(MAT).size();++i) { \
 #define IF(CONDITION) if((CONDITION)) {
 #define ELSE } else {
 #define ELSEIF(CONDITION) } else if((CONDITION)) {
-#define ENDIF END
 
 ///////////////////////////////////////////////////////////////////////////////
 // Mathematics
