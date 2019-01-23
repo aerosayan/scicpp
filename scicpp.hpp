@@ -32,12 +32,17 @@
 #ifndef __SCICPP_HPP__
 #define __SCICPP_HPP__
 ///////////////////////////////////////////////////////////////////////////////
-// Header file includes
+// Definitions checks
+///////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////
+// General Header file includes
 ///////////////////////////////////////////////////////////////////////////////
 #include <stdint.h>
 #include <stdio.h>
 #include <iostream>
 #include <vector>
+
 
 //---------------------------------------------------------------------------//
 // The loop iterator data type used
@@ -55,6 +60,7 @@
 //  Newline 
 //---------------------------------------------------------------------------//
 #define NL std::endl;
+#define nl "\n"
 
 ///////////////////////////////////////////////////////////////////////////////
 // Debugging macros
@@ -63,63 +69,104 @@
 //---------------------------------------------------------------------------//
 // Print the value of X
 //---------------------------------------------------------------------------//
-#define DBG(X) STREAM<<#X<<"\t:\t"<<(X)<<NL
-#define DBG2(X,Y) DBG(X); DBG(Y);
-#define DBG3(X,Y,Z) DBG(X); DBG(Y); DBG(Z);
+  #define DBG(X) STREAM<<#X<<"\t:\t"<<(X)<<NL
+  #define xdbg(X) DBG((X))
+  #define DBG2(X,Y) DBG((X)); DBG((Y));
+  #define xdbg2(X,Y) DBG2((X),(Y))
+  #define DBG3(X,Y,Z) DBG((X)); DBG((Y)); DBG((Z));
+  #define xdbg3(X,Y,Z) xdbg3((X),(Y),(Z))
 
 //---------------------------------------------------------------------------//
-// Print the array ARR
+// Print the vector VEC
 //---------------------------------------------------------------------------//
-#define DBGARR(ARR) \
-STREAM<<#ARR<<"\t:\t["; \
-for(szt i=1;i<(ARR).size();++i) { \
-  STREAM<<(ARR)[i]<<","; \
-} \
-STREAM<<"]"<<NL;
-
-//---------------------------------------------------------------------------//
-// Print the matrix MAT
-//---------------------------------------------------------------------------//
-#define DBGMAT(MAT) \
-STREAM<<#MAT; \
-for(szt i=1;i<(MAT).size();++i) { \
-  STREAM<<"\t:\t["; \
-  for(szt j=1;j<(MAT)[i].size();++j) { \
-    STREAM<<(MAT)[i][j]<<","; \
+  #define DBGVEC(VEC) \
+  STREAM<<#VEC<<"\t:\t["; \
+  for(szt i=1;i<(VEC).size();++i) { \
+  STREAM<<(VEC)[i]<<","; \
   } \
-  STREAM<<"]"<<NL; \
-} 
+  STREAM<<"]"<<NL;
+
+  #define xdbgvec(VEC) DBGVEC((VEC))
+
+//---------------------------------------------------------------------------//
+// Print the matrix VEC2
+//---------------------------------------------------------------------------//
+  #define DBGVEC2(VEC2) \
+  STREAM<<#VEC2; \
+  for(szt i=1;i<(VEC2).size();++i) { \
+    STREAM<<"\t:\t["; \
+    for(szt j=1;j<(VEC2)[i].size();++j) { \
+      STREAM<<(VEC2)[i][j]<<","; \
+    } \
+    STREAM<<"]"<<NL; \
+  } 
+
+  #define xbdgvec2(VEC2) DBGVEC2((VEC2))
 
 #endif
 
 // If DEBUG is not defined then do not use the debugging features
 #ifndef DEBUG
-#define DBG(X) 
-#define DBG2(X,Y) 
-#define DBG3(X,Y,Z)
-#define DBGARR(ARR) 
-#define DBGMAT(MAT)
+  #define DBG(X) 
+  #define xdbg(X) 
+  #define DBG2(X,Y) 
+  #define xdbg2(X) 
+  #define DBG3(X,Y,Z)
+  #define xdbg3(X) 
+  #define DBGVEC(VEC) 
+  #define xdbgvec(VEC)
+  #define DBGVEC2(VEC2)
+  #define xbdgvec2(VEC2)
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-// Datatype definition macros
+// Basic datatype definition macros
 ///////////////////////////////////////////////////////////////////////////////
 //---------------------------------------------------------------------------//
 // 1D vector of type TYPE
 //---------------------------------------------------------------------------//
 #define VEC(TYPE) std::vector< TYPE >
+#define xvec(TYPE) VEC(TYPE)
 
 //---------------------------------------------------------------------------//
-// 2D matrix of type TYPE
+// 2D vector( essentially a matrix) of type TYPE
 //---------------------------------------------------------------------------//
-#define MAT(TYPE) std::vector<std::vector< TYPE > >
+#define VEC2(TYPE) std::vector<std::vector< TYPE > >
+#define xvec2(TYPE) VEC2(TYPE)
+
+//---------------------------------------------------------------------------//
+// Tree set of type TYPE
+//---------------------------------------------------------------------------//
+#define TSET(TYPE) std::set< TYPE >
+#define xtset(TYPE) TSET(TYPE)
+
+//---------------------------------------------------------------------------//
+// Tree map of type TYPE 
+//---------------------------------------------------------------------------//
+#define TMAP(XTYPE,YTYPE) std::map< XTYPE , YTYPE >
+#define xtmap(XTYPE,YTYPE) TMAP(XTYPE,YTYPE)
+
+//---------------------------------------------------------------------------//
+// Hash set of type TYPE
+//---------------------------------------------------------------------------//
+#define HSET(TYPE) std::unordered_set< TYPE >
+#define xhset(TYPE) HSET(TYPE)
+
+//---------------------------------------------------------------------------//
+// Hash map of type TYPE
+//---------------------------------------------------------------------------//
+#define HMAP(XTYPE,YTYPE) std::unordered_map< XTYPE , YTYPE >
+#define xhmap(XTYPE,YTYPE) HMAP(XTYPE,YTYPE)
 
 ///////////////////////////////////////////////////////////////////////////////
 // Commonly used macros for vector
 ///////////////////////////////////////////////////////////////////////////////
 #define EMBK emplace_back
+#define xembk EMBK
 #define PSBK push_back
+#define xpsbk PSBK
 #define RSRV reserve
+#define xrsrv RSRV
 
 ///////////////////////////////////////////////////////////////////////////////
 // Language extensions
@@ -147,8 +194,13 @@ for(szt i=1;i<(MAT).size();++i) { \
 // >> ENDDO
 //---------------------------------------------------------------------------//
 #define END }
+#define xend END
 #define ENDDO END
+#define xenddo ENDDO
 #define ENDIF END
+#define xendif ENDIF
+#define ENDWHILE END
+#define xendwhile ENDWHILE
 
 //---------------------------------------------------------------------------//
 // Increment variable I in the inclusive range [START,END] with step=+1
@@ -166,12 +218,13 @@ for(szt i=1;i<(MAT).size();++i) { \
 // 1,2,3,4,5,
 //---------------------------------------------------------------------------//
 // USE : Nested 2D case
-// >> u32 i;
+// >> u32 i,j;
 // >> DO(i,1,2)
 // >>   cout<<i<<endl;
 // >>   DO(j,3,4)
 // >>     cout<<j<<",";
 // >>   ENDDO
+// >>   cout<<endl;
 // >> ENDDO
 //
 // RESULT : Should print,
@@ -181,6 +234,7 @@ for(szt i=1;i<(MAT).size();++i) { \
 // 3,4,
 //---------------------------------------------------------------------------//
 #define DO(I,START,END)  for((I)=(START); (I)<=(END); ++(I)) {
+#define xdo(I,START,END) DO(I,START,END)
 
 //---------------------------------------------------------------------------//
 // Decrement variable I in the inclusive range [START,END] with step=-1
@@ -198,12 +252,13 @@ for(szt i=1;i<(MAT).size();++i) { \
 // 5,4,3,2,1
 //---------------------------------------------------------------------------//
 // USE : Nested 2D case
-// >> u32 i;
+// >> u32 i,j;
 // >> RDO(i,2,1)
 // >>   cout<<i<<endl;
 // >>   RDO(j,4,3)
 // >>     cout<<j<<",";
 // >>   ENDDO
+// >>   cout<<endl;
 // >> ENDDO
 //
 // RESULT : Should print,
@@ -213,13 +268,14 @@ for(szt i=1;i<(MAT).size();++i) { \
 // 4,3,
 //---------------------------------------------------------------------------//
 #define RDO(I,START,END) for((I)=(START); (I)>=(END); --(I)) {
+#define xrdo(I,START,END) RDO(I,START,END)
 
 //---------------------------------------------------------------------------//
-// Macro for 1 variable based for loop
+// Macro for 1 variable based general loop
 // NOTE : These can be nested together.
 //---------------------------------------------------------------------------//
 // USE : 1D forward driving inclusive range case
-// >> DOX(u32,i,1,<=,5,1) // >> Expands to : for(u32 i=1;i<=5;i+=1)
+// >> DOX(u32,i,1,<=,5,++i) // >> Expands to : for(u32 i=1;i<=5;++i)
 // >>   cout<<i<<",";
 // >> ENDDO
 // 
@@ -227,15 +283,32 @@ for(szt i=1;i<(MAT).size();++i) { \
 // 1,2,3,4,5,
 //---------------------------------------------------------------------------//
 // USE : 1D reverse driving exclusive range case
-// >> DOX(u32,i,5,>,1,-1) // >> Expands to : for(u32 i=5;i>1;i+=-1)
+// >> DOX(u32,i,5,>,1,--i) // >> Expands to : for(u32 i=5;i>1;--1)
 // >>   cout<<i<<",";
 // >> ENDDO
 //
 // RESULT : Should print,
 // 5,4,3,2,
 //---------------------------------------------------------------------------//
-#define DOX(TYPE,I,START,OP,END,STEP) \
-        for(TYPE (I)=(START);(I) OP (END);(I)+=(STEP)){
+#define DOX(TYPE,I,START,OP,END,STEP_OP) \
+        for(TYPE (I)=(START);(I) OP (END);(STEP_OP)){
+
+#define xdox(TYPE,I,START,OP,END,STEP_OP) DOX(TYPE,I,START,OP,END,STEP_OP)
+
+//---------------------------------------------------------------------------//
+// While loop
+//---------------------------------------------------------------------------//
+// USE : 
+// >> s32 i=10;
+// WHILE(i--)
+//  cout<<i<<",";
+// ENDWHILE
+// 
+// RESULT : Should print
+// 9,8,7,6,5,4,3,2,1,0,
+//---------------------------------------------------------------------------//
+#define WHILE(CONDITION) while((CONDITION)) {
+#define xwhile(CONDITION) WHILE((CONDITION))
 
 //---------------------------------------------------------------------------//
 // Conditional operations
@@ -251,13 +324,41 @@ for(szt i=1;i<(MAT).size();++i) { \
 // >> ENDIF
 //---------------------------------------------------------------------------//
 #define IF(CONDITION) if((CONDITION)) {
+#define xif(CONDITION) IF((CONDITION))
 #define ELSE } else {
+#define xelse(CONDITION) ELSE((CONDITION))
 #define ELSEIF(CONDITION) } else if((CONDITION)) {
+#define xelseif(CONDITION) ELSEIF((CONDITION))
 
 ///////////////////////////////////////////////////////////////////////////////
 // Mathematics
 ///////////////////////////////////////////////////////////////////////////////
+//---------------------------------------------------------------------------//
+// Square of the given expression 
+//---------------------------------------------------------------------------//
+// USE : Just pass in an expression to square
+// >> VEC(u32) x = {0,1,2,3,4,5};
+// >> cout<<SQ(x[5])<<endl;
+//
+// RESULT : Should print,
+// 25
+//---------------------------------------------------------------------------//
 #define SQ(CMD) (CMD)*(CMD)
+#define xsq(CMD) SQ((CMD))
+
+//---------------------------------------------------------------------------//
+// Cube of the given  expression 
+//---------------------------------------------------------------------------//
+// USE : Just pass in an expression to cube
+// >> VEC(u32) x = {0,1,2,3,4,5};
+// >> cout<<SQ(x[5])<<endl;
+//
+// RESULT : Should print,
+// 125
+//---------------------------------------------------------------------------//
+#define CU(CMD) (CMD)*(CMD)*(CMD)
+#define xcu(CMD) CU((CMD))
+
 ///////////////////////////////////////////////////////////////////////////////
 // Basic data types
 ///////////////////////////////////////////////////////////////////////////////

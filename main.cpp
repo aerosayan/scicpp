@@ -37,12 +37,7 @@
 using namespace std;
 
 // prints a horizontal line
-void hruler()
-{
-cout<<
-"-----------------------------------------------------------------------------"
-<<endl;
-}
+void hruler();
 
 // Solves the 1D nonliner convection equation using Finite Difference Method
 void run_nonlinear_convection_test();
@@ -94,7 +89,6 @@ void run_nonlinear_convection_test()
   DO(i,1,nx)
     x[i] = min_x + (dx*(i-1));
   ENDDO
-  //DBGARR(x);
 
   // Dependent variable to simulate and solve
   // un is u at time n
@@ -164,14 +158,14 @@ void run_unit_tests()
   DBG3(varx,vary,varz);
 
   hruler();
-  cout<<"TST :: Testing VEC,DBGARR "<<endl;
+  cout<<"TST :: Testing VEC,DBGVEC "<<endl;
   VEC(s32) vecx = {0,1,2,3,4,5,6,7,8,9,10};
-  DBGARR(vecx);
+  DBGVEC(vecx);
 
   hruler();
-  cout<<"TST :: Testing MAT,DBGMAT "<<endl;
-  MAT(s32) matx = {{0,0,0,0,0,0},{0,1,2,3,4,5},{0,6,7,8,9,10}};
-  DBGMAT(matx);
+  cout<<"TST :: Testing VEC2,DBGMAT "<<endl;
+  VEC2(s32) matx = {{0,0,0,0,0,0},{0,1,2,3,4,5},{0,6,7,8,9,10}};
+  DBGVEC2(matx);
 
   hruler();
   cout<<"TST :: Testing DO in forward direction"<<endl;
@@ -192,7 +186,7 @@ void run_unit_tests()
   hruler();
   cout<<"TST :: Testing DOX in forward direction"<<endl;
   cout<<"j\t:\t";
-  DOX(u32,j,1,<=,10,1)
+  DOX(u32,j,1,<=,10,++j)
     cout<<j<<",";
   ENDDO
   cout<<endl;
@@ -200,7 +194,7 @@ void run_unit_tests()
   hruler();
   cout<<"TST :: Testing DOX in forward direction with step=2"<<endl;
   cout<<"j\t:\t";
-  DOX(u32,j,2,<=,20,2)
+  DOX(u32,j,2,<=,20,j+=2)
     cout<<j<<",";
   ENDDO
   cout<<endl;
@@ -208,7 +202,7 @@ void run_unit_tests()
   hruler();
   cout<<"TST :: Testing DOX in reverse direction"<<endl;
   cout<<"j\t:\t";
-  DOX(u32,j,10,>=,1,-1)
+  DOX(u32,j,10,>=,1,--j)
     cout<<j<<",";
   ENDDO
   cout<<endl;
@@ -216,11 +210,20 @@ void run_unit_tests()
   hruler();
   cout<<"TST :: Testing DOX in reverse direction with step=2"<<endl;
   cout<<"j\t:\t";
-  DOX(u32,j,20,>=,2,-2)
+  DOX(u32,j,20,>=,2,j-=2)
     cout<<j<<",";
   ENDDO
   cout<<endl;
 
+  hruler();
+  cout<<"TST :: Testing WHILE"<<endl; 
+  i=10;
+  cout<<"i\t:\t";
+  WHILE(i--)
+    cout<<i<<",";
+  ENDWHILE
+  cout<<endl;
+  
   hruler();
   cout<<"TST :: Testing IF,ELSE,ELSEIF..."<<endl;
   IF(varx == 1)
@@ -244,4 +247,13 @@ void run_unit_tests()
   ELSE
     cout<<"    :: ELSE    :: varz != 1 and 2"<<endl;
   ENDIF
+
+}
+
+// Prints a horizontal line
+void hruler()
+{
+cout<<
+"-----------------------------------------------------------------------------"
+<<endl;
 }
