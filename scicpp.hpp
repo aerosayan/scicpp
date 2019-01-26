@@ -42,6 +42,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <vector>
+#include <limits>
 
 
 //---------------------------------------------------------------------------//
@@ -61,6 +62,12 @@
 //---------------------------------------------------------------------------//
 #define NL std::endl;
 #define nl "\n"
+
+//---------------------------------------------------------------------------//
+// sizeof 
+//---------------------------------------------------------------------------//
+#define SOF sizeof
+#define xsof SOF
 
 ///////////////////////////////////////////////////////////////////////////////
 // Debugging macros
@@ -159,7 +166,7 @@
 #define xhmap(XTYPE,YTYPE) HMAP(XTYPE,YTYPE)
 
 ///////////////////////////////////////////////////////////////////////////////
-// Commonly used macros for vector
+// Commonly used macros for vector and also other containers
 ///////////////////////////////////////////////////////////////////////////////
 #define EMBK emplace_back
 #define xembk EMBK
@@ -167,6 +174,34 @@
 #define xpsbk PSBK
 #define RSRV reserve
 #define xrsrv RSRV
+
+///////////////////////////////////////////////////////////////////////////////
+// Template macros
+///////////////////////////////////////////////////////////////////////////////
+#define TEM(TYPE) template<typename TYPE>
+#define xtem(TYPE) TEM(TYPE)
+
+///////////////////////////////////////////////////////////////////////////////
+// Limits
+///////////////////////////////////////////////////////////////////////////////
+// Absoulte value of N
+// Required since C++ has different absolute function for different types.
+// And we would like to use a single one and not worry about the type.
+// Moreover this is better for templated operations .
+#define ABS(N) ( ((N) >= 0 ) ? (N) : -(N) )
+#define xabs(N) ABS((N))
+
+// Numeric minimum value for type TYPE
+#define ABSMIN(TYPE) std::numeric_limits< TYPE >::min()
+#define xabsmin(TYPE) ABSMIN(TYPE) 
+
+// Numeric maximum value for type TYPE
+#define ABSMAX(TYPE) std::numeric_limits< TYPE >::max()
+#define xabsmax(TYPE) ABSMAX(TYPE)
+
+// Machine epsilon
+#define EPS(TYPE) std::numeric_limits< TYPE >::epsilon()
+#define xeps(TYPE) EPS(TYPE)
 
 ///////////////////////////////////////////////////////////////////////////////
 // Language extensions
@@ -326,7 +361,7 @@
 #define IF(CONDITION) if((CONDITION)) {
 #define xif(CONDITION) IF((CONDITION))
 #define ELSE } else {
-#define xelse(CONDITION) ELSE((CONDITION))
+#define xelse ELSE
 #define ELSEIF(CONDITION) } else if((CONDITION)) {
 #define xelseif(CONDITION) ELSEIF((CONDITION))
 
@@ -358,6 +393,92 @@
 //---------------------------------------------------------------------------//
 #define CU(CMD) (CMD)*(CMD)*(CMD)
 #define xcu(CMD) CU((CMD))
+
+//---------------------------------------------------------------------------//
+// Extracts the  sign of a number
+//---------------------------------------------------------------------------//
+// xsgn(X) := (1 if X > 0) or (0 if x==0) or (-1 if x < 0)
+//---------------------------------------------------------------------------//
+// NOTE : This is best used for real numbers.
+// However,
+// Since the implementation is templated it can support non-real numbers too.
+//---------------------------------------------------------------------------//
+// NOTE : We will receive -Wtype-limits for the <0 test in GCC.
+// Thus we use overloads to take care of that warning.
+//---------------------------------------------------------------------------//
+// USE : 
+// >> s32 x = -100; u32 y = 100; s32 z = 0;
+// >> cout<<xsgn(x)<<endl;
+// >> cout<<xsgn(y)<<endl;
+// >> cout<<xsgn(z)<<endl;
+// 
+// RESULT : Should print,
+// -1
+// 1
+// 0
+//---------------------------------------------------------------------------//
+// If X is of a signed type
+// Called by xsgn(TYPE X)
+xtem(TYPE) inline constexpr
+int xsgn(TYPE X, std::true_type is_signed)
+{
+  return (X > TYPE(0)) - (X < TYPE(0));
+}
+
+// If X is of an unsigned type
+// Called by xsgn(TYPE X)
+xtem(TYPE) inline constexpr
+int xsgn(TYPE X, std::false_type is_signed)
+{
+  return (X > TYPE(0));
+}
+
+// Return the sign of a number
+// Calls xsgn(TYPE X,std::true_type) if x is of a signed type
+// Calls xsgn(TYPE X,std::false_type) if x is of an unsigned type
+xtem(TYPE) inline constexpr
+int xsgn(TYPE X)
+{
+  return xsgn(X, std::is_signed<TYPE>());
+}
+
+//---------------------------------------------------------------------------//
+// Determinant of a 2*2 matrix
+// A  B
+// C  D
+//---------------------------------------------------------------------------//
+#define DET2X2(A,B,C,D) ((A)*(D) - (B)*(C))
+#define xdet2x2(A,B,C,D) DET2X2((A),(B),(C),(D))
+
+//---------------------------------------------------------------------------//
+// Determinant of a 3*3 matrix
+// A B C
+// D E F
+// I J K
+//---------------------------------------------------------------------------//
+#define DET3X3(A,B,C,D,E,F,I,J,K) \
+        ( ((A)*DET2X2((E),(F),(J),(K))) - \
+          ((B)*DET2X2((D),(F),(I),(K))) + \
+          ((C)*DET2X2((D),(E),(I),(J)))   \
+        )
+#define xdet3x3(A,B,C,D,E,F,I,J,K) \
+        DET3X3((A),(B),(C),(D),(E),(F),(I),(J),(K))
+
+//---------------------------------------------------------------------------//
+// Determinant of a 4*4 matrix
+// A B C D 
+// E F G H
+// I J K L
+// M N O P
+//---------------------------------------------------------------------------//
+#define DET4X4(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P) \
+        ( ((A)*(DET3X3((F),(G),(H),(J),(K),(L),(N),(O),(P)))) - \
+          ((B)*(DET3X3((E),(G),(H),(I),(K),(L),(M),(O),(P)))) + \
+          ((C)*(DET3X3((E),(F),(H),(I),(J),(L),(M),(N),(P)))) - \
+          ((D)*(DET3X3((E),(F),(G),(I),(J),(K),(M),(N),(O))))   \
+        )
+#define xdet4x4(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P) \
+        DET4X4((A),(B),(C),(D),(E),(F),(G),(H),(I),(J),(K),(L),(M),(N),(O),(P))
 
 ///////////////////////////////////////////////////////////////////////////////
 // Basic data types

@@ -116,11 +116,12 @@ void run_nonlinear_convection_test()
     cout<<"ERROR :: INPUT FILE NOT OPENED CORRECTLY"<<endl;
   ENDIF
 
+  f64 dtdx = dt/dx;
   // Start temporal iterations
   DO(t,1,nt)
     un = un1;
     DO(i,2,nx)
-      un1[i] = un[i] - un[i]*dt/dx*(un[i]-un[i-1]);
+      un1[i] = un[i] - un[i]*dtdx*(un[i]-un[i-1]);
     ENDDO
   ENDDO
 
