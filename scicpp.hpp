@@ -133,37 +133,48 @@
 // 1D vector of type TYPE
 //---------------------------------------------------------------------------//
 #define VEC(TYPE) std::vector< TYPE >
-#define xvec(TYPE) VEC(TYPE)
+#define xvec(TYPE) std::vector< TYPE >
 
 //---------------------------------------------------------------------------//
 // 2D vector( essentially a matrix) of type TYPE
 //---------------------------------------------------------------------------//
 #define VEC2(TYPE) std::vector<std::vector< TYPE > >
-#define xvec2(TYPE) VEC2(TYPE)
+#define xvec2(TYPE) std::vector<std::vector< TYPE > >
 
 //---------------------------------------------------------------------------//
 // Tree set of type TYPE
 //---------------------------------------------------------------------------//
 #define TSET(TYPE) std::set< TYPE >
-#define xtset(TYPE) TSET(TYPE)
+#define xtset(TYPE) std::set< TYPE >
 
 //---------------------------------------------------------------------------//
 // Tree map of type TYPE 
 //---------------------------------------------------------------------------//
 #define TMAP(XTYPE,YTYPE) std::map< XTYPE , YTYPE >
-#define xtmap(XTYPE,YTYPE) TMAP(XTYPE,YTYPE)
+#define xtmap(XTYPE,YTYPE) std::map< XTYPE , YTYPE >
 
 //---------------------------------------------------------------------------//
 // Hash set of type TYPE
 //---------------------------------------------------------------------------//
 #define HSET(TYPE) std::unordered_set< TYPE >
-#define xhset(TYPE) HSET(TYPE)
+#define xhset(TYPE) std::unordered_set< TYPE >
 
 //---------------------------------------------------------------------------//
 // Hash map of type TYPE
 //---------------------------------------------------------------------------//
 #define HMAP(XTYPE,YTYPE) std::unordered_map< XTYPE , YTYPE >
-#define xhmap(XTYPE,YTYPE) HMAP(XTYPE,YTYPE)
+#define xhmap(XTYPE,YTYPE) std::unordered_map< XTYPE , YTYPE >
+
+//---------------------------------------------------------------------------//
+// Pair of type XTYPE,YTYPE
+//---------------------------------------------------------------------------//
+#define xpair(XTYPE,YTYPE) std::pair< XTYPE, YTYPE >
+#define xmkpair std::make_pair
+
+//---------------------------------------------------------------------------//
+// String
+//---------------------------------------------------------------------------//
+#define xstr std::string 
 
 ///////////////////////////////////////////////////////////////////////////////
 // Commonly used macros for vector and also other containers
@@ -174,12 +185,15 @@
 #define xpsbk PSBK
 #define RSRV reserve
 #define xrsrv RSRV
+#define xsize size()
+#define xcapacity capacity()
+
 
 ///////////////////////////////////////////////////////////////////////////////
 // Template macros
 ///////////////////////////////////////////////////////////////////////////////
-#define TEM(TYPE) template<typename TYPE>
-#define xtem(TYPE) TEM(TYPE)
+#define TEM(TYPE) template<typename TYPE >
+#define xtem(TYPE) template<typename TYPE >
 
 ///////////////////////////////////////////////////////////////////////////////
 // Limits
@@ -507,4 +521,21 @@ typedef std::vector<std::vector<s32> >   v2s32;
 typedef std::vector<std::vector<u32> >   v2u32;
 typedef std::vector<std::vector<f32> >   v2f32;
 typedef std::vector<std::vector<f64> >   v2f64;
+///////////////////////////////////////////////////////////////////////////////
+// Decorations
+///////////////////////////////////////////////////////////////////////////////
+// Horizontal ruler 
+// NOTE : Semicolon is required after xhr.
+#define xhr std::cout<< \
+"/////////////////////////////////////"<< \
+"/////////////////////////////////////"<<nl \
+
+#define xhr2 std::cout<< \
+"....................................."<< \
+"....................................."<<nl \
+
+// Print dots
+#define xdt std::cout<<"..."<<nl
+
+
 #endif 
