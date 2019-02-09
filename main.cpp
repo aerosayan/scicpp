@@ -3,8 +3,8 @@
 //                                                                           //
 //               .|'''||            .|'''', '||'''|, '||'''|,                //
 //               ||             ''  ||       ||   ||  ||   ||                //
-//               `|'''|, .|'',  ||  ||       ||...|'  ||...|'                // 
-//                .   || ||     ||  ||       ||       ||                     // 
+//               `|'''|, .|'',  ||  ||       ||...|'  ||...|'                //
+//                .   || ||     ||  ||       ||       ||                     //
 //               ||...|' `|..' .||. `|....' .||      .||                     //
 //                                                                           //
 //                                                                           //
@@ -21,8 +21,8 @@
 /// DISCLAIMER :
 /// This is the intellectual property of the author Sayan Bhattacharjee.
 /// Currently this is not being distributed since development is incomplete.
-/// In future, proper licensing will be done and this coding standard and 
-/// library will be made Open-Source. We do not give any guarantee for the 
+/// In future, proper licensing will be done and this coding standard and
+/// library will be made Open-Source. We do not give any guarantee for the
 /// correct operation of the library, neither are we to be held responsible
 /// for any kind of damage caused by the use of this software.
 ///////////////////////////////////////////////////////////////////////////////
@@ -36,41 +36,33 @@
 
 using namespace std;
 
-// prints a horizontal line
-void hruler();
-
 // Solves the 1D nonliner convection equation using Finite Difference Method
 void run_nonlinear_convection_test();
 
-// Runs necessary unit tests
-void run_unit_tests();
 
 int main()
 {
   // Run non-linear convection test to show the use of scicpp for science
   run_nonlinear_convection_test();
 
-  // Run unit tests to show the internal operation of scicpp
-  // run_unit_tests(); 
-
   return 0;
 }
 
 // Solves the 1D nonliner convection equation using Finite Difference Method
 // 1D nonlinear convection equation is :
-// 
+//
 //                     d(u)/dt + u*d(u)/dx = 0
 //
 // where,
 // u is the dependent variable.
 // d(u)/dt is the partial derivative of u w.r.t time(t)
 // d(u)/dx is the partial derivative of u w.r.t space(x)
-// 
+//
 // We shall be using FTBS( Forward in Time Backward in Space) scheme to solve.
 void run_nonlinear_convection_test()
 {
   // Loop iterators
-  // NOTE: We define the type first 
+  // NOTE: We define the type first
   u32 i,t;
   // No. of spatial nodes
   u32 nx = 801;
@@ -78,7 +70,7 @@ void run_nonlinear_convection_test()
   u32 nt = 3000;
   // Minimum and maximum space domain which will be discretized
   f64 min_x = 0.0; f64 max_x = 2.0;
-  // Spatial discretization 
+  // Spatial discretization
   f64 dx = (max_x-min_x)/(nx-1);
   // Temporal discretization
   f64 dt = 0.00015;
@@ -120,7 +112,7 @@ void run_nonlinear_convection_test()
   // Start temporal iterations
   DO(t,1,nt)
     un = un1;
-    DO(i,2,nx)
+    xdo(i,2,nx)
       un1[i] = un[i] - un[i]*dtdx*(un[i]-un[i-1]);
     ENDDO
   ENDDO
@@ -142,119 +134,3 @@ void run_nonlinear_convection_test()
   output_file.close();
 }
 
-// Runs necessary unit tests
-void run_unit_tests()
-{
-  // Loop iterators
-  // NOTE: We define the type first 
-  u32 i;
-
-  hruler();
-  cout<<"TST :: Testing DBG,DB2,DBG3"<<endl;
-  s32 varx = 1;
-  s32 vary = 2;
-  s32 varz = 3;
-  DBG(varx);
-  DBG2(varx,vary);
-  DBG3(varx,vary,varz);
-
-  hruler();
-  cout<<"TST :: Testing VEC,DBGVEC "<<endl;
-  VEC(s32) vecx = {0,1,2,3,4,5,6,7,8,9,10};
-  DBGVEC(vecx);
-
-  hruler();
-  cout<<"TST :: Testing VEC2,DBGMAT "<<endl;
-  VEC2(s32) matx = {{0,0,0,0,0,0},{0,1,2,3,4,5},{0,6,7,8,9,10}};
-  DBGVEC2(matx);
-
-  hruler();
-  cout<<"TST :: Testing DO in forward direction"<<endl;
-  cout<<"i\t:\t";
-  DO(i,1,10)
-    cout<<i<<",";
-  ENDDO
-  cout<<endl;
-
-  hruler();
-  cout<<"TST :: Testing RDO in reverse direction"<<endl;
-  cout<<"i\t:\t";
-  RDO(i,10,1)
-    cout<<i<<",";
-  ENDDO
-  cout<<endl;
-
-  hruler();
-  cout<<"TST :: Testing DOX in forward direction"<<endl;
-  cout<<"j\t:\t";
-  DOX(u32,j,1,<=,10,++j)
-    cout<<j<<",";
-  ENDDO
-  cout<<endl;
-
-  hruler();
-  cout<<"TST :: Testing DOX in forward direction with step=2"<<endl;
-  cout<<"j\t:\t";
-  DOX(u32,j,2,<=,20,j+=2)
-    cout<<j<<",";
-  ENDDO
-  cout<<endl;
-
-  hruler();
-  cout<<"TST :: Testing DOX in reverse direction"<<endl;
-  cout<<"j\t:\t";
-  DOX(u32,j,10,>=,1,--j)
-    cout<<j<<",";
-  ENDDO
-  cout<<endl;
- 
-  hruler();
-  cout<<"TST :: Testing DOX in reverse direction with step=2"<<endl;
-  cout<<"j\t:\t";
-  DOX(u32,j,20,>=,2,j-=2)
-    cout<<j<<",";
-  ENDDO
-  cout<<endl;
-
-  hruler();
-  cout<<"TST :: Testing WHILE"<<endl; 
-  i=10;
-  cout<<"i\t:\t";
-  WHILE(i--)
-    cout<<i<<",";
-  ENDWHILE
-  cout<<endl;
-  
-  hruler();
-  cout<<"TST :: Testing IF,ELSE,ELSEIF..."<<endl;
-  IF(varx == 1)
-    cout<<"    :: IF      :: varx == 1"<<endl;
-  ELSE
-    cout<<"    :: ELSE    :: varx != 1"<<endl;
-  ENDIF
-
-  IF(vary == 1)
-    cout<<"    :: IF      :: vary == 1"<<endl;
-  ELSEIF(vary==2)
-    cout<<"    :: ELSEIF  :: vary == 2"<<endl;
-  ELSE
-    cout<<"    :: ELSE    :: vary != 1 and 2"<<endl;
-  ENDIF
-
-  IF(varz == 1)
-    cout<<"    :: IF      :: varz == 1"<<endl;
-  ELSEIF(varz == 2)
-    cout<<"    :: ELSEIF  :: varz == 2"<<endl;
-  ELSE
-    cout<<"    :: ELSE    :: varz != 1 and 2"<<endl;
-  ENDIF
-
-}
-
-// Prints a horizontal line
-void hruler()
-{
-cout<<
-"-----------------------------------------------------------------------------"
-<<endl;
-}

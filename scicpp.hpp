@@ -3,8 +3,8 @@
 //                                                                           //
 //               .|'''||            .|'''', '||'''|, '||'''|,                //
 //               ||             ''  ||       ||   ||  ||   ||                //
-//               `|'''|, .|'',  ||  ||       ||...|'  ||...|'                // 
-//                .   || ||     ||  ||       ||       ||                     // 
+//               `|'''|, .|'',  ||  ||       ||...|'  ||...|'                //
+//                .   || ||     ||  ||       ||       ||                     //
 //               ||...|' `|..' .||. `|....' .||      .||                     //
 //                                                                           //
 //                                                                           //
@@ -21,8 +21,8 @@
 /// DISCLAIMER :
 /// This is the intellectual property of the author Sayan Bhattacharjee.
 /// Currently this is not being distributed since development is incomplete.
-/// In future, proper licensing will be done and this coding standard and 
-/// library will be made Open-Source. We do not give any guarantee for the 
+/// In future, proper licensing will be done and this coding standard and
+/// library will be made Open-Source. We do not give any guarantee for the
 /// correct operation of the library, neither are we to be held responsible
 /// for any kind of damage caused by the use of this software.
 ///////////////////////////////////////////////////////////////////////////////
@@ -53,18 +53,18 @@
 
 //---------------------------------------------------------------------------//
 // Should the debugging be in cerr/cout/clog ?
-// Default : std::cout
+// Default : std::cerr
 //---------------------------------------------------------------------------//
-#define STREAM std::cout
+#define STREAM std::cerr
 
 //---------------------------------------------------------------------------//
-//  Newline 
+//  Newline
 //---------------------------------------------------------------------------//
 #define NL std::endl;
 #define nl "\n"
 
 //---------------------------------------------------------------------------//
-// sizeof 
+// sizeof
 //---------------------------------------------------------------------------//
 #define SOF sizeof
 #define xsof SOF
@@ -74,22 +74,24 @@
 ///////////////////////////////////////////////////////////////////////////////
 #ifdef DEBUG
 //---------------------------------------------------------------------------//
-// Print the value of X
+// Print the value of any thing
 //---------------------------------------------------------------------------//
-  #define DBG(X) STREAM<<#X<<"\t:\t"<<(X)<<NL
+  #define DBG(X) STREAM<<"DBG :: "<<#X<<"\t:\t"<<(X)<<NL
   #define xdbg(X) DBG((X))
   #define DBG2(X,Y) DBG((X)); DBG((Y));
   #define xdbg2(X,Y) DBG2((X),(Y))
   #define DBG3(X,Y,Z) DBG((X)); DBG((Y)); DBG((Z));
   #define xdbg3(X,Y,Z) xdbg3((X),(Y),(Z))
+  #define DBG4(W,X,Y,Z) DBG((W)); DBG((X)); DBG((Y)); DBG((Z));
+  #define xdbg4(W,X,Y,Z) xdbg4((W),(X),(Y),(Z))
 
 //---------------------------------------------------------------------------//
 // Print the vector VEC
 //---------------------------------------------------------------------------//
   #define DBGVEC(VEC) \
   STREAM<<#VEC<<"\t:\t["; \
-  for(szt i=1;i<(VEC).size();++i) { \
-  STREAM<<(VEC)[i]<<","; \
+  for(szt i=0;i<(VEC).size();++i) { \
+    STREAM<<(VEC)[i]<<","; \
   } \
   STREAM<<"]"<<NL;
 
@@ -100,30 +102,45 @@
 //---------------------------------------------------------------------------//
   #define DBGVEC2(VEC2) \
   STREAM<<#VEC2; \
-  for(szt i=1;i<(VEC2).size();++i) { \
+  for(szt i=0;i<(VEC2).size();++i) { \
     STREAM<<"\t:\t["; \
-    for(szt j=1;j<(VEC2)[i].size();++j) { \
+    for(szt j=0;j<(VEC2)[i].size();++j) { \
       STREAM<<(VEC2)[i][j]<<","; \
     } \
     STREAM<<"]"<<NL; \
-  } 
+  }
 
   #define xbdgvec2(VEC2) DBGVEC2((VEC2))
 
+//---------------------------------------------------------------------------//
+// Print the array elements from START to END
+//---------------------------------------------------------------------------//
+  #define DBGARR(ARR,START,END) \
+  STREAM<<#ARR<<"\t:\t["; \
+  for(szt i=(START);i<=END;++i){ \
+    STREAM<<(ARR)[i]<<","; \
+  } \
+  STREAM<<"]"<<NL;
+
+  #define xdbgarr(ARR,START,END) DBGARR((ARR),(START),(END))
 #endif
 
 // If DEBUG is not defined then do not use the debugging features
 #ifndef DEBUG
-  #define DBG(X) 
-  #define xdbg(X) 
-  #define DBG2(X,Y) 
-  #define xdbg2(X) 
+  #define DBG(X)
+  #define xdbg(X)
+  #define DBG2(X,Y)
+  #define xdbg2(X)
   #define DBG3(X,Y,Z)
-  #define xdbg3(X) 
-  #define DBGVEC(VEC) 
+  #define xdbg3(X,Y,Z)
+  #define DBG4(W,X,Y,Z)
+  #define xdbg4(W,X,Y,Z)
+  #define DBGVEC(VEC)
   #define xdbgvec(VEC)
   #define DBGVEC2(VEC2)
   #define xbdgvec2(VEC2)
+  #define DBGARR(ARR,START,END)
+  #define xdbgarr(ARR,START,END)
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -148,7 +165,7 @@
 #define xtset(TYPE) std::set< TYPE >
 
 //---------------------------------------------------------------------------//
-// Tree map of type TYPE 
+// Tree map of type TYPE
 //---------------------------------------------------------------------------//
 #define TMAP(XTYPE,YTYPE) std::map< XTYPE , YTYPE >
 #define xtmap(XTYPE,YTYPE) std::map< XTYPE , YTYPE >
@@ -170,11 +187,13 @@
 //---------------------------------------------------------------------------//
 #define xpair(XTYPE,YTYPE) std::pair< XTYPE, YTYPE >
 #define xmkpair std::make_pair
+#define xpf first
+#define xps second
 
 //---------------------------------------------------------------------------//
 // String
 //---------------------------------------------------------------------------//
-#define xstr std::string 
+#define xstr std::string
 
 ///////////////////////////////////////////////////////////////////////////////
 // Commonly used macros for vector and also other containers
@@ -207,7 +226,7 @@
 
 // Numeric minimum value for type TYPE
 #define ABSMIN(TYPE) std::numeric_limits< TYPE >::min()
-#define xabsmin(TYPE) ABSMIN(TYPE) 
+#define xabsmin(TYPE) ABSMIN(TYPE)
 
 // Numeric maximum value for type TYPE
 #define ABSMAX(TYPE) std::numeric_limits< TYPE >::max()
@@ -232,7 +251,7 @@
 // >>   IF(y[i] > 1.0)
 // >>     break;
 // >>   END
-// >> END 
+// >> END
 //---------------------------------------------------------------------------//
 // USE : Cosmetic use
 // >> DO(i,1,n)
@@ -250,6 +269,7 @@
 #define xendif ENDIF
 #define ENDWHILE END
 #define xendwhile ENDWHILE
+#define ENDOMP END
 
 //---------------------------------------------------------------------------//
 // Increment variable I in the inclusive range [START,END] with step=+1
@@ -262,7 +282,7 @@
 // >> DO(i,1,5)
 // >>   cout<<i<<",";
 // >> ENDDO
-// 
+//
 // RESULT : Should print,
 // 1,2,3,4,5,
 //---------------------------------------------------------------------------//
@@ -282,8 +302,8 @@
 // 2
 // 3,4,
 //---------------------------------------------------------------------------//
-#define DO(I,START,END)  for((I)=(START); (I)<=(END); ++(I)) {
-#define xdo(I,START,END) DO(I,START,END)
+#define  DO(I,START,END)  for((I)=(START); (I)<=(END); ++(I)) {
+#define xdo(I,START,END)  for((I)=(START); (I)<=(END); ++(I)) {
 
 //---------------------------------------------------------------------------//
 // Decrement variable I in the inclusive range [START,END] with step=-1
@@ -291,12 +311,12 @@
 //---------------------------------------------------------------------------//
 // NOTE : TYPE for varialbe I needs to be set before calling DO
 //---------------------------------------------------------------------------//
-// USE : 1D case 
+// USE : 1D case
 // >> u32 i;
 // >> RDO(i,5,1)
 // >>   cout<<i<<",";
 // >> ENDDO
-// 
+//
 // RESULT : Should print,
 // 5,4,3,2,1
 //---------------------------------------------------------------------------//
@@ -316,8 +336,8 @@
 // 1
 // 4,3,
 //---------------------------------------------------------------------------//
-#define RDO(I,START,END) for((I)=(START); (I)>=(END); --(I)) {
-#define xrdo(I,START,END) RDO(I,START,END)
+#define  RDO(I,START,END) for((I)=(START); (I)>=(END); --(I)) {
+#define xrdo(I,START,END) for((I)=(START); (I)>=(END); --(I)) {
 
 //---------------------------------------------------------------------------//
 // Macro for 1 variable based general loop
@@ -327,7 +347,7 @@
 // >> DOX(u32,i,1,<=,5,++i) // >> Expands to : for(u32 i=1;i<=5;++i)
 // >>   cout<<i<<",";
 // >> ENDDO
-// 
+//
 // RESULT : Should print,
 // 1,2,3,4,5,
 //---------------------------------------------------------------------------//
@@ -342,22 +362,23 @@
 #define DOX(TYPE,I,START,OP,END,STEP_OP) \
         for(TYPE (I)=(START);(I) OP (END);(STEP_OP)){
 
-#define xdox(TYPE,I,START,OP,END,STEP_OP) DOX(TYPE,I,START,OP,END,STEP_OP)
+#define xdox(TYPE,I,START,OP,END,STEP_OP) \
+        for(TYPE (I)=(START);(I) OP (END);(STEP_OP)){
 
 //---------------------------------------------------------------------------//
 // While loop
 //---------------------------------------------------------------------------//
-// USE : 
+// USE :
 // >> s32 i=10;
 // WHILE(i--)
 //  cout<<i<<",";
 // ENDWHILE
-// 
+//
 // RESULT : Should print
 // 9,8,7,6,5,4,3,2,1,0,
 //---------------------------------------------------------------------------//
-#define WHILE(CONDITION) while((CONDITION)) {
-#define xwhile(CONDITION) WHILE((CONDITION))
+#define  WHILE(CONDITION) while((CONDITION)) {
+#define xwhile(CONDITION) while((CONDITION)) {
 
 //---------------------------------------------------------------------------//
 // Conditional operations
@@ -372,18 +393,71 @@
 // >>   y += x;
 // >> ENDIF
 //---------------------------------------------------------------------------//
-#define IF(CONDITION) if((CONDITION)) {
-#define xif(CONDITION) IF((CONDITION))
-#define ELSE } else {
-#define xelse ELSE
-#define ELSEIF(CONDITION) } else if((CONDITION)) {
-#define xelseif(CONDITION) ELSEIF((CONDITION))
+#define  IF(CONDITION) if((CONDITION)) {
+#define xif(CONDITION) if((CONDITION)) {
+#define  ELSE } else {
+#define xelse } else {
+#define  ELSEIF(CONDITION) } else if((CONDITION)) {
+#define xelseif(CONDITION) } else if((CONDITION)) {
+
+///////////////////////////////////////////////////////////////////////////////
+// OpenMP support
+// WARNING : TESTING AND UNSTABLE FOR NOW ...
+///////////////////////////////////////////////////////////////////////////////
+//---------------------------------------------------------------------------//
+// Multi-line OpenMP command : requires END to brace in the control block
+//---------------------------------------------------------------------------//
+// USE :
+// > OMP("omp parallel for")
+// >     printf("Hello World\n");
+// > END
+//
+// RESULT : This should print on a machine with 4 theads as
+// Hello World
+// Hello World
+// Hello World
+// Hello World
+//---------------------------------------------------------------------------//
+#define OMP(PRG)  _Pragma(#PRG) {
+
+//---------------------------------------------------------------------------//
+// Multiline-line general OpenMP command.
+//---------------------------------------------------------------------------//
+// USE :
+// > OMPX("omp simd", DO(i,0,n-1))
+// >   c[i] = a[i]+b[i];
+// > ENDDO
+//---------------------------------------------------------------------------//
+// NECESSITY :
+// This way there is no conflict between scicpp and OpenMP.
+// Due to scicpp and OpenMP both using pre-processor directives, the
+// OpenMP demands that there be the required C code after some OpenMP command.
+// OMPX allows proper expansion of scicpp along with OpenMP.
+//
+// For ex.
+// > #pragma omp simd
+// > for(int i=0;i<n;i++)
+// >   c[i] = a[i]+b[i];
+//
+// is valid.
+//
+// However,
+// > #pragma omp simd
+// > DO(i,0,n-1)
+// >   c[i] = a[i]+b[i];
+// > ENDDO
+//
+// is not valid.
+//---------------------------------------------------------------------------//
+#define OMPX(PRG,CMD) \
+  _Pragma(#PRG) \
+  CMD
 
 ///////////////////////////////////////////////////////////////////////////////
 // Mathematics
 ///////////////////////////////////////////////////////////////////////////////
 //---------------------------------------------------------------------------//
-// Square of the given expression 
+// Square of the given expression
 //---------------------------------------------------------------------------//
 // USE : Just pass in an expression to square
 // >> VEC(u32) x = {0,1,2,3,4,5};
@@ -393,10 +467,10 @@
 // 25
 //---------------------------------------------------------------------------//
 #define SQ(CMD) (CMD)*(CMD)
-#define xsq(CMD) SQ((CMD))
+#define xsq(CMD) (CMD)*(CMD)
 
 //---------------------------------------------------------------------------//
-// Cube of the given  expression 
+// Cube of the given  expression
 //---------------------------------------------------------------------------//
 // USE : Just pass in an expression to cube
 // >> VEC(u32) x = {0,1,2,3,4,5};
@@ -406,7 +480,7 @@
 // 125
 //---------------------------------------------------------------------------//
 #define CU(CMD) (CMD)*(CMD)*(CMD)
-#define xcu(CMD) CU((CMD))
+#define xcu(CMD) (CMD)*(CMD)*(CMD)
 
 //---------------------------------------------------------------------------//
 // Extracts the  sign of a number
@@ -420,12 +494,12 @@
 // NOTE : We will receive -Wtype-limits for the <0 test in GCC.
 // Thus we use overloads to take care of that warning.
 //---------------------------------------------------------------------------//
-// USE : 
+// USE :
 // >> s32 x = -100; u32 y = 100; s32 z = 0;
 // >> cout<<xsgn(x)<<endl;
 // >> cout<<xsgn(y)<<endl;
 // >> cout<<xsgn(z)<<endl;
-// 
+//
 // RESULT : Should print,
 // -1
 // 1
@@ -480,7 +554,7 @@ int xsgn(TYPE X)
 
 //---------------------------------------------------------------------------//
 // Determinant of a 4*4 matrix
-// A B C D 
+// A B C D
 // E F G H
 // I J K L
 // M N O P
@@ -524,18 +598,18 @@ typedef std::vector<std::vector<f64> >   v2f64;
 ///////////////////////////////////////////////////////////////////////////////
 // Decorations
 ///////////////////////////////////////////////////////////////////////////////
-// Horizontal ruler 
-// NOTE : Semicolon is required after xhr.
-#define xhr std::cout<< \
-"/////////////////////////////////////"<< \
-"/////////////////////////////////////"<<nl \
+// Horizontal ruler
+// NOTE : Semicolon is required after xhr and xhrd.
+#define DEC_STREAM std::cerr
 
-#define xhr2 std::cout<< \
-"....................................."<< \
-"....................................."<<nl \
+#define xhr DEC_STREAM<< \
+"/////////////////////////////////"<< \
+"/////////////////////////////////"<<nl \
 
-// Print dots
-#define xdt std::cout<<"..."<<nl
+#define xhrd DEC_STREAM<< \
+"................................."<< \
+"................................."<<nl \
 
 
-#endif 
+
+#endif
