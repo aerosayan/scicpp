@@ -149,43 +149,43 @@
 //---------------------------------------------------------------------------//
 // 1D vector of type TYPE
 //---------------------------------------------------------------------------//
-#define VEC(TYPE) std::vector< TYPE >
-#define xvec(TYPE) std::vector< TYPE >
+#define  VEC(...) std::vector< __VA_ARGS__ >
+#define xvec(...) std::vector< __VA_ARGS__ >
 
 //---------------------------------------------------------------------------//
 // 2D vector( essentially a matrix) of type TYPE
 //---------------------------------------------------------------------------//
-#define VEC2(TYPE) std::vector<std::vector< TYPE > >
-#define xvec2(TYPE) std::vector<std::vector< TYPE > >
+#define  VEC2(...) std::vector<std::vector< __VA_ARGS__ > >
+#define xvec2(...) std::vector<std::vector< __VA_ARGS__ > >
 
 //---------------------------------------------------------------------------//
 // Tree set of type TYPE
 //---------------------------------------------------------------------------//
-#define TSET(TYPE) std::set< TYPE >
-#define xtset(TYPE) std::set< TYPE >
+#define  TSET(...) std::set< __VA_ARGS__ >
+#define xtset(...) std::set< __VA_ARGS__ >
 
 //---------------------------------------------------------------------------//
 // Tree map of type TYPE
 //---------------------------------------------------------------------------//
-#define TMAP(XTYPE,YTYPE) std::map< XTYPE , YTYPE >
-#define xtmap(XTYPE,YTYPE) std::map< XTYPE , YTYPE >
+#define  TMAP(...) std::map< __VA_ARGS__ >
+#define xtmap(...) std::map< __VA_ARGS__ >
 
 //---------------------------------------------------------------------------//
 // Hash set of type TYPE
 //---------------------------------------------------------------------------//
-#define HSET(TYPE) std::unordered_set< TYPE >
-#define xhset(TYPE) std::unordered_set< TYPE >
+#define  HSET(...) std::unordered_set< __VA_ARGS__ >
+#define xhset(...) std::unordered_set< __VA_ARGS__ >
 
 //---------------------------------------------------------------------------//
 // Hash map of type TYPE
 //---------------------------------------------------------------------------//
-#define HMAP(XTYPE,YTYPE) std::unordered_map< XTYPE , YTYPE >
-#define xhmap(XTYPE,YTYPE) std::unordered_map< XTYPE , YTYPE >
+#define  HMAP(...) std::unordered_map< __VA_ARGS__ >
+#define xhmap(...) std::unordered_map< __VA_ARGS__ >
 
 //---------------------------------------------------------------------------//
 // Pair of type XTYPE,YTYPE
 //---------------------------------------------------------------------------//
-#define xpair(XTYPE,YTYPE) std::pair< XTYPE, YTYPE >
+#define xpair(...) std::pair< __VA_ARGS__ >
 #define xmkpair std::make_pair
 #define xpf first
 #define xps second
@@ -211,8 +211,11 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Template macros
 ///////////////////////////////////////////////////////////////////////////////
-#define TEM(TYPE) template<typename TYPE >
-#define xtem(TYPE) template<typename TYPE >
+// General form template using variadic macro
+#define  TEM(...) template< __VA_ARGS__ >
+#define xtem(...) template< __VA_ARGS__ >
+#define  TN typename
+#define xtn typename
 
 ///////////////////////////////////////////////////////////////////////////////
 // Limits
@@ -507,7 +510,7 @@
 //---------------------------------------------------------------------------//
 // If X is of a signed type
 // Called by xsgn(TYPE X)
-xtem(TYPE) inline constexpr
+xtem(xtn TYPE) inline constexpr
 int xsgn(TYPE X, std::true_type is_signed)
 {
   return (X > TYPE(0)) - (X < TYPE(0));
@@ -515,7 +518,7 @@ int xsgn(TYPE X, std::true_type is_signed)
 
 // If X is of an unsigned type
 // Called by xsgn(TYPE X)
-xtem(TYPE) inline constexpr
+xtem(xtn TYPE) inline constexpr
 int xsgn(TYPE X, std::false_type is_signed)
 {
   return (X > TYPE(0));
@@ -524,7 +527,7 @@ int xsgn(TYPE X, std::false_type is_signed)
 // Return the sign of a number
 // Calls xsgn(TYPE X,std::true_type) if x is of a signed type
 // Calls xsgn(TYPE X,std::false_type) if x is of an unsigned type
-xtem(TYPE) inline constexpr
+xtem(xtn TYPE) inline constexpr
 int xsgn(TYPE X)
 {
   return xsgn(X, std::is_signed<TYPE>());
