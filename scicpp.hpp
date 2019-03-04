@@ -195,15 +195,25 @@
 //---------------------------------------------------------------------------//
 #define xstr std::string
 
+//---------------------------------------------------------------------------//
+// Queues
+//---------------------------------------------------------------------------//
+#define xqueue(...) std::queue< __VA_ARGS__ >
+
+//---------------------------------------------------------------------------//
+// Stacks
+//---------------------------------------------------------------------------//
+#define xstack(...) std::stack< __VA_ARGS__ >
+
 ///////////////////////////////////////////////////////////////////////////////
 // Commonly used macros for vector and also other containers
 ///////////////////////////////////////////////////////////////////////////////
 #define EMBK emplace_back
-#define xembk EMBK
+#define xembk emplace_back
 #define PSBK push_back
-#define xpsbk PSBK
+#define xpsbk push_back
 #define RSRV reserve
-#define xrsrv RSRV
+#define xrsrv reserve
 #define xsize size()
 #define xcapacity capacity()
 
@@ -224,8 +234,10 @@
 // Required since C++ has different absolute function for different types.
 // And we would like to use a single one and not worry about the type.
 // Moreover this is better for templated operations .
-#define ABS(N) ( ((N) >= 0 ) ? (N) : -(N) )
-#define xabs(N) ABS((N))
+#define   ABS std::abs
+#define  xabs std::abs
+#define  FABS std::fabs
+#define xfabs std::fabs
 
 // Numeric minimum value for type TYPE
 #define ABSMIN(TYPE) std::numeric_limits< TYPE >::min()
@@ -408,6 +420,11 @@
 // WARNING : TESTING AND UNSTABLE FOR NOW ...
 ///////////////////////////////////////////////////////////////////////////////
 //---------------------------------------------------------------------------//
+// Pragmas
+//---------------------------------------------------------------------------//
+#define xpragma(...) _Pragma( __VA_ARGS__ )
+
+//---------------------------------------------------------------------------//
 // Multi-line OpenMP command : requires END to brace in the control block
 //---------------------------------------------------------------------------//
 // USE :
@@ -464,26 +481,32 @@
 //---------------------------------------------------------------------------//
 // USE : Just pass in an expression to square
 // >> VEC(u32) x = {0,1,2,3,4,5};
-// >> cout<<SQ(x[5])<<endl;
+// >> cout<<xsq(x[5])<<endl;
 //
 // RESULT : Should print,
 // 25
 //---------------------------------------------------------------------------//
-#define SQ(CMD) (CMD)*(CMD)
-#define xsq(CMD) (CMD)*(CMD)
+template<typename t>
+inline t xsq(t x)
+{
+    return x*x;
+}
 
 //---------------------------------------------------------------------------//
 // Cube of the given  expression
 //---------------------------------------------------------------------------//
 // USE : Just pass in an expression to cube
 // >> VEC(u32) x = {0,1,2,3,4,5};
-// >> cout<<SQ(x[5])<<endl;
+// >> cout<<xcu(x[5])<<endl;
 //
 // RESULT : Should print,
 // 125
 //---------------------------------------------------------------------------//
-#define CU(CMD) (CMD)*(CMD)*(CMD)
-#define xcu(CMD) (CMD)*(CMD)*(CMD)
+template<typename t>
+inline t xcu(t x)
+{
+  return x*x*x;
+}
 
 //---------------------------------------------------------------------------//
 // Extracts the  sign of a number
@@ -538,8 +561,12 @@ int xsgn(TYPE X)
 // A  B
 // C  D
 //---------------------------------------------------------------------------//
-#define DET2X2(A,B,C,D) ((A)*(D) - (B)*(C))
-#define xdet2x2(A,B,C,D) DET2X2((A),(B),(C),(D))
+template<typename t>
+inline t xdet2x2(const t& A,const t& B,
+                 const t& C,const t& D)
+{
+  return (A)*(D) - (B)*(C);
+}
 
 //---------------------------------------------------------------------------//
 // Determinant of a 3*3 matrix
@@ -547,14 +574,15 @@ int xsgn(TYPE X)
 // D E F
 // I J K
 //---------------------------------------------------------------------------//
-#define DET3X3(A,B,C,D,E,F,I,J,K) \
-        ( ((A)*DET2X2((E),(F),(J),(K))) - \
-          ((B)*DET2X2((D),(F),(I),(K))) + \
-          ((C)*DET2X2((D),(E),(I),(J)))   \
-        )
-#define xdet3x3(A,B,C,D,E,F,I,J,K) \
-        DET3X3((A),(B),(C),(D),(E),(F),(I),(J),(K))
-
+template<typename t>
+inline t xdet3x3(const t& A,const t& B,const t& C,
+                 const t& D,const t& E,const t& F,
+                 const t& I,const t& J,const t& K)
+{
+  return ( ((A)*xdet2x2((E),(F),(J),(K))) -
+           ((B)*xdet2x2((D),(F),(I),(K))) +
+           ((C)*xdet2x2((D),(E),(I),(J))) );
+}
 //---------------------------------------------------------------------------//
 // Determinant of a 4*4 matrix
 // A B C D
